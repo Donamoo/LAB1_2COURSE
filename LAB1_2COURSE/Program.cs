@@ -54,7 +54,6 @@ namespace ConsoleApp
             Console.WriteLine("4. Изменить работника");
             Console.WriteLine("5. Количество работников по отделам");
             Console.WriteLine("6. Средняя зарплата по отделам");
-            Console.WriteLine("0. Выход");
             Console.Write("Выбор: ");
         }
 
