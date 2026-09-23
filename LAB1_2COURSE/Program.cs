@@ -9,15 +9,10 @@ namespace ConsoleApp
 {
     /// <summary>
     /// Консольное представление приложения «Работники предприятия».
-    /// Использует тот же слой бизнес-логики <see cref="Logic"/>, что и WinForms-форма.
     /// </summary>
     internal class Program
     {
         private static Logic logic = new Logic();
-
-        /// <summary>
-        /// Точка входа. Запускает главное меню в цикле.
-        /// </summary>
         static void Main(string[] args)
         {
             bool exit = false;
