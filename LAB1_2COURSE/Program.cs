@@ -47,7 +47,7 @@ namespace ConsoleApp
         /// </summary>
         static void PrintMenu()
         {
-            Console.WriteLine("=== Работники предприятия ===");
+            Console.WriteLine("Работники предприятия");
             Console.WriteLine("1. Добавить работника");
             Console.WriteLine("2. Удалить работника");
             Console.WriteLine("3. Показать всех работников");
