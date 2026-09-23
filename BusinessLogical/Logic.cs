@@ -99,7 +99,7 @@ namespace BusinessLogical
         /// Словарь, где ключ — название отдела,
         /// значение — средняя заработная плата в этом отделе.
         /// </returns>
-        public Dictionary<string, decimal> AverageSalaryByDepartment()
+        public Dictionary<string, decimal> AvgSalary()
         {
             return Workers
                 .GroupBy(w => w.Department)

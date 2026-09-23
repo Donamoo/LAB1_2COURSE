@@ -17,7 +17,7 @@ namespace WindowsFormsApp1
         {
             InitializeComponent();
 
-            Dictionary<string, decimal> averages = logic.AverageSalaryByDepartment();
+            Dictionary<string, decimal> averages = logic.AvgSalary();
             foreach (var pair in averages)
             {
                 dataGridView1.Rows.Add(pair.Key, pair.Value);
