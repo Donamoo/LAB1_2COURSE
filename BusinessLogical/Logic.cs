@@ -1,9 +1,10 @@
-﻿using System;
+﻿using DataAccessLayer;
+using DataAccessLayer.EntityFramework;
+using DataAccessLayer.Dapper;
+using Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Model;
 
 namespace BusinessLogical
 {
@@ -12,96 +13,76 @@ namespace BusinessLogical
     /// </summary>
     public class Logic
     {
-        List<Worker> Workers = new List<Worker>();
+        /// <summary>
+        /// Репозиторий для доступа к данным работников.
+        /// Есть выбор:
+        /// public IRepository<Worker> repository = new EntityRepository<Worker>();
+        /// или
+        /// IRepository<Worker> repository = new DapperRepository<Worker>();
+        /// </summary>
+        public IRepository<Worker> repository = new EntityRepository<Worker>();
+
 
         /// <summary>
-        /// Добавляет нового работника в коллекцию.
+        /// Добавляет нового работника.
         /// </summary>
-        /// <param name="id">Уникальный идентификатор.</param>
-        /// <param name="name">ФИО работника.</param>
-        /// <param name="departament">Название отдела.</param>
-        /// <param name="salary">Заработная плата.</param>
         public bool AddWorker(int id, string name, string departament, decimal salary)
         {
-            if (Workers.Any(w => w.ID == id))
+            if (repository.ReadById(id) != null)
                 return false;
 
-            Worker worker = new Worker()
+            var worker = new Worker
             {
                 ID = id,
                 Name = name,
                 Department = departament,
                 Salary = salary
             };
-            Workers.Add(worker);
+            repository.Add(worker);
             return true;
         }
 
-        /// <summary>
-        /// Возвращает копию списка всех работников.
-        /// </summary>
-        /// <returns>Список объектов <see cref="Worker"/>.</returns>
+        /// <summary>Возвращает список всех работников.</summary>
         public List<Worker> GetAll()
         {
-            return new List<Worker>(Workers);
+            return repository.ReadAll().ToList();
         }
 
-        /// <summary>
-        /// Удаляет работника по идентификатору.
-        /// </summary>
-        /// <param name="id">Идентификатор удаляемого работника.</param>
-        /// <returns><c>true</c>, если работник найден и удалён; иначе <c>false</c>.</returns>
+        /// <summary>Удаляет работника по идентификатору.</summary>
         public bool DeleteWorker(int id)
         {
-            Worker worker = Workers.FirstOrDefault(w => w.ID == id);
+            var worker = repository.ReadById(id);
             if (worker == null) return false;
-            Workers.Remove(worker);
+
+            repository.Delete(id);
             return true;
         }
 
-        /// <summary>
-        /// Изменяет данные работника по идентификатору.
-        /// </summary>
-        /// <param name="id">Идентификатор изменяемого работника.</param>
-        /// <param name="name">Новое ФИО.</param>
-        /// <param name="department">Новый отдел.</param>
-        /// <param name="salary">Новая зарплата.</param>
-        /// <returns><c>true</c>, если работник найден и обновлён; иначе <c>false</c>.</returns>
+        /// <summary>Изменяет данные работника.</summary>
         public bool UpdateWorker(int id, string name, string department, decimal salary)
         {
-            Worker worker = Workers.FirstOrDefault(w => w.ID == id);
+            var worker = repository.ReadById(id);
             if (worker == null) return false;
 
             worker.Name = name;
             worker.Department = department;
             worker.Salary = salary;
+            repository.Update(worker);
             return true;
         }
 
-        /// <summary>
-        /// Бизнес-функция: группировка работников по отделам.
-        /// </summary>
-        /// <returns>
-        /// Словарь, где ключ — название отдела,
-        /// значение — список работников этого отдела.
-        /// </returns>
+        /// <summary>Группировка работников по отделам.</summary>
         public Dictionary<string, List<Worker>> GroupByDepartment()
         {
-            return Workers
+            return repository.ReadAll()
                 .GroupBy(w => w.Department)
                 .ToDictionary(g => g.Key, g => g.ToList());
         }
 
-        /// <summary>
-        /// Бизнес-функция: средняя зарплата по каждому отделу.
-        /// </summary>
-        /// <returns>
-        /// Словарь, где ключ — название отдела,
-        /// значение — средняя заработная плата в этом отделе.
-        /// </returns>
+        /// <summary>Средняя зарплата по каждому отделу.</summary>
         public Dictionary<string, decimal> AvgSalary()
         {
-            return Workers
+            return repository.ReadAll()
                 .GroupBy(w => w.Department)
                 .ToDictionary(g => g.Key, g => g.Average(w => w.Salary));
         }

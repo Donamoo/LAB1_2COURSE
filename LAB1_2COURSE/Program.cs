@@ -3,7 +3,6 @@ using Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
 
 namespace ConsoleApp
 {
@@ -12,7 +11,9 @@ namespace ConsoleApp
     /// </summary>
     internal class Program
     {
+        // Logic создаётся без параметров — источник данных выбран внутри Logic.
         private static Logic logic = new Logic();
+
         static void Main(string[] args)
         {
             bool exit = false;
@@ -57,17 +58,12 @@ namespace ConsoleApp
             Console.Write("Выбор: ");
         }
 
-
-        /// <summary>
-        /// Добавляет работника: запрашивает поля, проверяет корректность ввода, вызывает <see cref="Logic.AddWorker"/>.
-        /// </summary>
         /// <summary>
         /// Добавляет работника: запрашивает поля, проверяет их,
         /// вызывает <see cref="Logic.AddWorker"/>.
         /// </summary>
         static void AddWorker()
         {
-
             Console.Write("Введите ID: ");
             if (!int.TryParse(Console.ReadLine(), out int id) || id <= 0)
             {
@@ -88,7 +84,6 @@ namespace ConsoleApp
                 return;
             }
 
-           
             Console.Write("Введите отдел: ");
             string department = (Console.ReadLine() ?? "").Trim();
             if (string.IsNullOrWhiteSpace(department))
@@ -118,6 +113,7 @@ namespace ConsoleApp
         /// </summary>
         static void DeleteWorker()
         {
+            ShowAllWorkers();
             int id = FoolCheckInt("Введите ID для удаления: ");
             if (id <= 0) return;
 
@@ -148,15 +144,13 @@ namespace ConsoleApp
         }
 
         /// <summary>
-        /// Изменяет работника: сначала по ID находит его, потом запрашивает новые поля.
-        /// </summary>
-        /// <summary>
         /// Изменяет работника: сначала по ID находит его,
         /// затем запрашивает новые поля,
         /// проверяет их и передаёт в <see cref="Logic.UpdateWorker"/>.
         /// </summary>
         static void UpdateWorker()
         {
+            ShowAllWorkers();
             int id = FoolCheckInt("Введите ID работника для изменения: ");
             if (id <= 0) return;
 
@@ -169,7 +163,6 @@ namespace ConsoleApp
 
             Console.WriteLine("Введите новые данные:");
 
-            
             Console.Write($"ФИО [{existing.Name}]: ");
             string nameInput = Console.ReadLine();
             string name = string.IsNullOrWhiteSpace(nameInput) ? existing.Name : nameInput.Trim();
@@ -185,7 +178,6 @@ namespace ConsoleApp
                 return;
             }
 
-            
             Console.Write($"Отдел [{existing.Department}]: ");
             string depInput = Console.ReadLine();
             string department = string.IsNullOrWhiteSpace(depInput) ? existing.Department : depInput.Trim();
@@ -214,7 +206,6 @@ namespace ConsoleApp
             else
                 Console.WriteLine("Не удалось обновить работника.");
         }
-
 
         /// <summary>
         /// Бизнес-функция: количество работников в каждом отделе.
