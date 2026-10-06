@@ -9,8 +9,7 @@ namespace DataAccessLayer.EntityFramework
     /// <summary>
     /// Реализация <see cref="IRepository{T}"/> на базе Entity Framework.
     /// </summary>
-    public class EntityRepository<T> : IRepository<T>
-        where T : class, IDomainObject
+    public class EntityRepository<T> : IRepository<T> where T : class, IDomainObject
     {
         private DBContext context;
         private DbSet<T> set;

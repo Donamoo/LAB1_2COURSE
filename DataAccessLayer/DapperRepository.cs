@@ -37,7 +37,6 @@ namespace DataAccessLayer.Dapper
 
         /// <summary>
         /// Создаёт таблицу Workers, если её ещё нет.
-        /// Схема согласована с тем, что генерирует EF Code First.
         /// </summary>
         private void IsTable()
         {
